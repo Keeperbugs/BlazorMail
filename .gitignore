@@ -1,0 +1,49 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Visual Studio Code
+.vscode/
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.json
+
+# Dependency directories
+node_modules/
+
+# Publish output
+wwwroot/
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE-specific files
+.idea/
+*.iml
+
+# Razor temporary files
+**/*.cshtml.g.cs
+**/*.razor.g.cs
+
+# Static web assets
+**/staticwebassets/
+**/staticwebassets.build.json
+**/staticwebassets.build.json.cache
+**/staticwebassets.development.json
+
+# Compressed files
+**/compressed/
+
+# Scoped CSS
+**/scopedcss/

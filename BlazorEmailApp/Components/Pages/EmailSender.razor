@@ -1,0 +1,110 @@
+@page "/email"
+@rendermode InteractiveServer
+@using BlazorEmailApp.Services
+@inject IEmailService EmailService
+@inject ILogger<EmailSender> Logger
+
+<PageTitle>Email Sender</PageTitle>
+
+<h1>Send Email</h1>
+
+<div class="form-container">
+    <EditForm Model="@_emailModel" OnValidSubmit="SendEmail">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="recipient">Recipient Email:</label>
+            <InputText id="recipient" @bind-Value="_emailModel.To" class="form-control" />
+            <ValidationMessage For="@(() => _emailModel.To)" />
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject:</label>
+            <InputText id="subject" @bind-Value="_emailModel.Subject" class="form-control" />
+            <ValidationMessage For="@(() => _emailModel.Subject)" />
+        </div>
+
+        <div class="form-group">
+            <label for="body">Message:</label>
+            <InputTextArea id="body" @bind-Value="_emailModel.Body" class="form-control" rows="5" />
+            <ValidationMessage For="@(() => _emailModel.Body)" />
+        </div>
+
+        <div class="form-check">
+            <InputCheckbox id="isHtml" @bind-Value="_emailModel.IsHtml" class="form-check-input" />
+            <label class="form-check-label" for="isHtml">Send as HTML</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" disabled="@_isSending">
+            @if (_isSending)
+            {
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>Sending...</span>
+            }
+            else
+            {
+                <span>Send Email</span>
+            }
+        </button>
+    </EditForm>
+
+    @if (_isSuccess.HasValue)
+    {
+        <div class="alert @(_isSuccess.Value ? "alert-success" : "alert-danger") mt-3">
+            @_statusMessage
+        </div>
+    }
+</div>
+
+@code {
+    private EmailMessage _emailModel = new();
+    private bool _isSending;
+    private bool? _isSuccess;
+    private string _statusMessage = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        if (EmailService == null)
+        {
+            Logger.LogError("IEmailService non è stato risolto correttamente.");
+        }
+    }
+
+    private async Task SendEmail()
+    {
+        _isSending = true;
+        _isSuccess = null;
+        _statusMessage = string.Empty;
+
+        try
+        {
+            var result = await EmailService.SendEmailAsync(_emailModel);
+            _isSuccess = result;
+            _statusMessage = result 
+                ? "Email sent successfully!" 
+                : "Failed to send email. Please check your settings and try again.";
+            
+            if (result)
+            {
+                Logger.LogInformation("Email inviata con successo a {Recipient}", _emailModel.To);
+                // Reset form after successful send
+                _emailModel = new EmailMessage();
+            }
+            else
+            {
+                Logger.LogWarning("Invio email fallito per {Recipient}", _emailModel.To);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Errore durante l'invio dell'email.");
+            _isSuccess = false;
+            _statusMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            _isSending = false;
+        }
+    }
+}

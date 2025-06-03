@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorEmailApp", "BlazorEmailApp\BlazorEmailApp.csproj", "{07BA8780-1303-09C9-FFEC-65152015F56C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07BA8780-1303-09C9-FFEC-65152015F56C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07BA8780-1303-09C9-FFEC-65152015F56C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07BA8780-1303-09C9-FFEC-65152015F56C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07BA8780-1303-09C9-FFEC-65152015F56C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D709F0BC-8526-4528-931D-05E21FAC8E81}
+	EndGlobalSection
+EndGlobal
