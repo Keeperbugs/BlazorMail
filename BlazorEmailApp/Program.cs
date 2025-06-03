@@ -2,15 +2,15 @@ using BlazorEmailApp.Components;
 using BlazorEmailApp.Models;
 using BlazorEmailApp.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Register the email service
-builder.Services.AddScoped<IEmailService, EmailService>();
+// Registra il servizio email simulato per il test
+builder.Services.AddScoped<IEmailService, EmailService>(); // Servizio reale
+//builder.Services.AddScoped<IEmailService, MockEmailService>(); // Servizio simulato
 
 // Configure SMTP settings from appsettings.json
 builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
@@ -26,28 +26,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
+app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
-// Middleware per verificare la registrazione del servizio
-app.Use(async (context, next) =>
-{
-    var emailService = context.RequestServices.GetService<IEmailService>();
-    if (emailService == null)
-    {
-        Console.WriteLine("Errore: IEmailService non è stato registrato correttamente.");
-    }
-    else
-    {
-        Console.WriteLine("IEmailService è stato registrato correttamente.");
-    }
-
-    await next.Invoke();
-});
 
 app.Run();

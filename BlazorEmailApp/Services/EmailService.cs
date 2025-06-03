@@ -21,6 +21,8 @@ namespace BlazorEmailApp.Services
         {
             try
             {
+                _logger.LogDebug("Preparazione dell'email per {recipient} con oggetto {subject}", message.To, message.Subject);
+
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(_smtpSettings.SenderEmail, _smtpSettings.SenderName),
@@ -37,13 +39,15 @@ namespace BlazorEmailApp.Services
                     EnableSsl = _smtpSettings.UseSsl
                 };
 
+                _logger.LogDebug("Invio email tramite server SMTP {server}:{port}", _smtpSettings.Server, _smtpSettings.Port);
+
                 await client.SendMailAsync(mailMessage);
-                _logger.LogInformation("Email sent successfully to {recipient}", message.To);
+                _logger.LogInformation("Email inviata con successo a {recipient}", message.To);
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to send email to {recipient}", message.To);
+                _logger.LogError(ex, "Errore durante l'invio dell'email a {recipient}. Oggetto: {subject}", message.To, message.Subject);
                 return false;
             }
         }
